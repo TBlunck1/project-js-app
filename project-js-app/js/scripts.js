@@ -4,7 +4,7 @@ let pokemonList = [
     {name: 'Drowzee', height: 1.0, type: 'Psychic'},
 ];
 
-for (let i=0; i < pokemonList.length; i++){
+for (let i=0; i < pokemonList.height; i++){
     //this is a conditional for to say what to print to the console when looking up a certain pokemon height
     if (pokemonList[i].height <1.1){
         document.write(pokemonList[i].height)

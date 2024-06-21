@@ -1,5 +1,5 @@
 let pokemonList = [
-    {id: 1, name:'Bulbasaur', height: 0.7, type: ['Grass', 'Poison']},
+    {id: 1, name: 'Blubasaur', height: 0.7, type: ['Grass', 'Poison']},
     {id: 2, name: 'Charzard', height: 1.7, type: ['Fire', 'Flying']},
     {id: 3, name: 'Squirtile', height: 0.5, type: 'Water'}
 ];
@@ -14,7 +14,7 @@ for (let i=0; i < pokemonList.length; i++) {
     //Writing the pokemon name and height on the websites DOM
     if (pokemon.height > 1) {
         document.write(' - Wow, that\'s big!');
-        //this conditional is looking for pokemon that is greater than 1 and saying "Wow, that's big!"
+        //this conditional is looking for pokemon that is greater than 1 and saying Wow, that's big!
     }
     document.write('</br>');
     //creating a line break in the websites DOM with HTML

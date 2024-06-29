@@ -20,11 +20,11 @@ let pokemonRepository = (function () {
     // This adds a Pokemon to the list
     function add(pokemon) {
         let keys = checkKeys(pokemon);
-        let lenght = Object.keys(pokemon).length; // Check lenght of the object
+        let length = Object.keys(pokemon).length; // Check length of the object
         // Checks to see if argument is an object 
         if (typeof pokemon !== 'object') {
             console.log('Pokemon is not an Object!');
-        } else if (keys === lenght) {
+        } else if (keys === length) {
             pokemonList.push(pokemon);
         } else {
             console.log('Wrong Keys');
@@ -44,20 +44,33 @@ let pokemonRepository = (function () {
         return i;
     }
 
+    function addListItem(pokemon) {
+        let list = document.querySelector('ul');
+        let listItem = document.createElement('li');
+        let button = document.createElement('button')
+        button.innerText = pokemon.name;
+        button.classList.add('pokemonEntry');
+        listItem.appendChild(button);
+        list.appendChild(listItem);
+        showDetails(button, pokemon)
+    }
+
+    function showDetails(button, pokemon) {
+        button.addEventListener('click', function (event) {
+            console.log(pokemon.name);
+        });
+    }
+
     return {
-        getAll: getAll,
         add: add,
+        getAll: getAll,
+        addListItem: addListItem
     };
 })();
 
 // Print all Pokemons + height
 function printPokemonList(pokemon) {
-    document.write(pokemon.name + ' (height: ' + pokemon.height + ') ');
-    if (pokemon.height > 1.7) {
-        document.write("Wow, that's big!" + '<br>');
-    } else {
-        document.write('<br>');
-    }
+    pokemonRepository.addListItem(pokemon);
 }
 
 // Log Pokemons to console
@@ -76,7 +89,7 @@ function filterByName(pokemonName) {
 console.log(pokemonRepository.getAll());
 
 // Add a new Pokemon
-pokemonRepository.add({ name: 'Pikachu', height: 0.4, types: ['Electric'] });
+//pokemonRepository.add({ name: 'Pikachu', height: 0.4, types: ['Electric'] });
 
 // Print all Pokemons
 pokemonRepository.getAll().forEach(printPokemonList);

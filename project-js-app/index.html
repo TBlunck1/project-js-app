@@ -11,16 +11,56 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <title>Pokedex App</title>
   </head>
+
   <body>
     <header>
-      <img src="img/Pokemon-logo.png" alt="Pokemon Logo" class="logo-img">
-      <h1>Pokedex</h1>
+      <nav class="navbar navbar-light" id ="home" role="navigation" style="background-color: rgb(207, 24, 24);" aria-label="navigationBar">
+        <a class="navbar-brand" href="#">
+          <img src="img/Pokemon-logo.png" alt="Pokemon Logo" class="logo-img">
+        </a>  
+      </nav>  
     </header>
-      <main>
-        <ul class="pokemon-list"></ul>
-      </main>
-    <script src="js/scripts.js"></script>
-    <script src="js/promise-polyfill.js"></script>
-    <script src="js/fetch-polyfill.js"></script>
+    <h1>Pokedex</h1>
+      <p>Choose the generation</p>
+      <div class="generations-button-container" aria-label="container of buttons to select pokemon generation">
+        <button class="btn btn-primary" id="gen1" type="button" aria-label="click to load generation 1 pokemon">Gen 1</button>
+        <button class="btn btn-primary" id="gen2" type="button" aria-label="click to load generation 2 pokemon">Gen 2</button>
+        <button class="btn btn-primary" id="gen3" type="button" aria-label="click to load generation 3 pokemon">Gen 3</button>
+        <button class="btn btn-primary" id="gen4" type="button" aria-label="click to load generation 4 pokemon">Gen 4</button>
+        <button class="btn btn-primary" id="gen5" type="button" aria-label="click to load generation 5 pokemon">Gen 5</button>
+        <button class="btn btn-primary" id="gen6" type="button" aria-label="click to load generation 6 pokemon">Gen 6</button>
+        <button class="btn btn-primary" id="gen7" type="button" aria-label="click to load generation 7 pokemon">Gen 7</button>
+        <button class="btn btn-primary" id="gen8" type="button" aria-label="click to load generation 8 pokemon">Gen 8</button>
+        <button class="btn btn-primary" id="gen9" type="button" aria-label="click to load generation 9 pokemon">Gen 9</button>
+      </div>
+      <p>Click on the pokemon for more details</p>
+      <!-- This is a loading text -->
+      <div id="loading-message" style="display: none;">Loading Please wait...</div>
+      <!-- List of pokemon buttons -->
+      <ul class="pokemon-list"></ul>
+      <!-- This is the Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p></p>
+            <img src="#" width="304" height="228" alt="Pokemon Sprite">
+            <p id="flavor-text"></p>
+          </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  <script src="js/promise-polyfill.js"></script>
+  <script src="js/fetch-polyfill.js"></script>
+  <script src="js/scripts.js"></script>
   </body>
 </html>

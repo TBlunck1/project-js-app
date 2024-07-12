@@ -1,19 +1,18 @@
 let pokemonRepository = (function () {
-    //This is my pokemon Array connected using API to link pokeapi with a limit of 151 pokemon
     let pokemonList = [];
-    let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
+    let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 
     function showLoadingMessage() {
         let loadingMessageElement = document.getElementById('loading-message');
         loadingMessageElement.style.display = 'block';
     }
 
-    function hideLoadingMessage(){
+    function hideLoadingMessage() {
         let loadingMessageElement = document.getElementById('loading-message');
         loadingMessageElement.style.display = 'none';
     }
 
-    //Function: add pokemon into the array with the following validation criteria
+    //function: add pokemon into the array with the following validation criteria
     function add(pokemon) {
         if (typeof pokemon === 'object' && 'name' in pokemon && 'id' in pokemon) {
             pokemonList.push(pokemon);
@@ -21,18 +20,23 @@ let pokemonRepository = (function () {
             console.log('Only objects with a name and id can be added');
         }
     }
-        //This function returns the array
-        function getAll() {
-            return pokemonList;
+
+    //function: returns the array
+    function getAll() {
+        return pokemonList;
     }
-    //Event listener to open the modal when the button has been clicked
+
+    //function: event listener to open the modal when button is clicked
     function buttonClick(button, pokemon) {
         button.addEventListener('click', function () {
             showDetails(pokemon);
         });
     }
 
-    //This generates the individual pokemon cards by setting the elements and appending them to the li .
+
+
+
+    //function: generates the individual pokemon cards by setting the elements and appending them to the li .list-group
     function addListItem(pokemon) {
         let pokemonListElement = document.querySelector('.list-group');
         let listItem = document.createElement('li');
@@ -40,6 +44,7 @@ let pokemonRepository = (function () {
         let card = document.createElement('div');
         card.classList.add('card');
 
+        // Set the background color based on Pokémon types
         if (pokemon.types.length > 1) {
             let color1 = getTypeColor(pokemon.types[0]);
             let color2 = getTypeColor(pokemon.types[1]);
@@ -50,15 +55,15 @@ let pokemonRepository = (function () {
 
         let imageElement = document.createElement('img');
         imageElement.classList.add('card-img-top', 'pokemon-image');
-        imageElement.src = pokemon.imageUrl;
+        imageElement.src = pokemon.imageUrl; // Set the image source to the sprite URL
         imageElement.setAttribute('alt', pokemon.name + ' sprite');
 
         let cardBody = document.createElement('div');
         cardBody.classList.add('card-body');
 
-        let cardTitle = document.createElement('div');
+        let cardTitle = document.createElement('h5');
         cardTitle.classList.add('card-title');
-        cardTitle.innerText = '#' + pokemon.id + '/n' + ' ' + pokemon.name;
+        cardTitle.innerText = '#' + pokemon.id + '\n' + ' ' + pokemon.name;
 
         cardBody.appendChild(cardTitle);
         card.appendChild(imageElement);
@@ -69,6 +74,7 @@ let pokemonRepository = (function () {
         buttonClick(card, pokemon);
     }
 
+    //function: helper function to set the background-color of the individual cards in addListItem
     function getTypeColor(type) {
         const typeColors = {
             bug: '#afd354',
@@ -93,21 +99,28 @@ let pokemonRepository = (function () {
         return typeColors[type] || 'white'; // Default to gray if type not found
     }
 
+    //function: renders the list of cards for every pokemon available from the api (up to 150 currently)
     function renderPokemonList() {
+        // Clear existing list items
         let pokemonListElement = document.querySelector('.list-group');
         pokemonListElement.innerHTML = '';
+        // Add sorted list items
         pokemonRepository.getAll().forEach(function (pokemon) {
             pokemonRepository.addListItem(pokemon);
         });
     }
 
+    //function: extract the ID from the URL (e.g., https://pokeapi.co/api/v2/pokemon/1/ -> 1)
     function extractPokemonId(url) {
         let idMatch = url.match(/\/pokemon\/(\d+)\//);
         return idMatch ? parseInt(idMatch[1]) : null;
     }
 
+
+    //function: loads the pokemon based on the pokeAPi and generate the list of pokemon cards
     function loadList() {
-        showLoadingMessage();
+        showLoadingMessage();//display loading message
+        //promise to fetch the pokemon details from the url
         return fetch(apiUrl).then(function (response) {
             return response.json();
         }).then(function (json) {
@@ -116,7 +129,7 @@ let pokemonRepository = (function () {
                 let pokemon = {
                     name: item.name,
                     detailsUrl: item.url,
-                    id: extractPokemonId(item.url)
+                    id: extractPokemonId(item.url) // Extract the ID from the URL
                 };
                 add(pokemon);
                 loadDetailsPromises.push(loadDetails(pokemon));
@@ -124,6 +137,7 @@ let pokemonRepository = (function () {
 
             return Promise.all(loadDetailsPromises);
         }).then(function () {
+            // Sort the pokemonList by ID, ensure pokemon is not displayed randomly
             pokemonList.sort((a, b) => a.id - b.id);
             hideLoadingMessage();
             renderPokemonList();
@@ -133,12 +147,14 @@ let pokemonRepository = (function () {
         });
     }
 
+    // function: Function to update API URL and reload list, activate via the next event listener 
     function updateApiUrlAndReload(newUrl) {
         apiUrl = newUrl;
-        pokemonList = []; 
+        pokemonList = []; // Clear the current list
         loadList();
     }
 
+    // Add event listener to the button with respective IDs
     document.getElementById('gen1').addEventListener('click', function () {
         updateApiUrlAndReload('https://pokeapi.co/api/v2/pokemon/?limit=151');
     });
@@ -167,6 +183,11 @@ let pokemonRepository = (function () {
         updateApiUrlAndReload('https://pokeapi.co/api/v2/pokemon?offset=905&limit=120');
     });
 
+
+
+
+
+    //function: promise prepares information to be prepared on the modal
     function loadDetails(item) {
         let url = item.detailsUrl;
         return fetch(url).then(function (response) {
@@ -183,6 +204,7 @@ let pokemonRepository = (function () {
         });
     }
 
+    //function: promise prepares flavor-text or pokedex entry to be prepared on the modal
     function loadFlavorText(item) {
         let speciesUrl = item.detailsUrl.replace('/pokemon/', '/pokemon-species/');
         return fetch(speciesUrl).then(function (response) {
@@ -195,6 +217,8 @@ let pokemonRepository = (function () {
         });
     }
 
+
+    //function: details to be displayed on the modal
     function showDetails(pokemon) {
         loadDetails(pokemon).then(function () {
             showModal(
@@ -211,6 +235,7 @@ let pokemonRepository = (function () {
         });
     }
 
+    //function: attach information to the bootstrap modal template on the .html file
     function showModal(title, text, img, flavorText) {
         let modal = document.querySelector('#exampleModalCenter');
         let modalTitle = modal.querySelector('.modal-title');
@@ -239,4 +264,5 @@ let pokemonRepository = (function () {
     };
 })();
 
+// Load the list of Pokémon
 pokemonRepository.loadList();
